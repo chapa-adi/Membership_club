@@ -5,7 +5,7 @@ def main():
     pdf_bytes = generate_ticket_pdf_via_documint(
         first_name="Aditi",
         last_name="Chapagain",
-        date="11/29/2025",      # same format you used in cURL
+        date="11/29/2025",   
         ticket_id="TEST-12345",
     )
 

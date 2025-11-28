@@ -1,0 +1,40 @@
+
+# Virtual environment
+venv/
+ENV/
+env/
+.venv/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+
+# SQLite DB files
+*.db
+*.sqlite3
+database.db
+
+
+# ENVIRONMENT VARIABLES
+
+.env
+*.env
+
+# Google Wallet private key
+wallet_key.json
+# Secrets / keys
+app/wallet_key.json
+*.key.json
+*.credentials.json
+
+# DOCUMINT & PDF OUTPUTS
+
+*.pdf
+generated_pdfs/
+ticket_*.pdf
+
+.vscode/
+

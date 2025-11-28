@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+sqlmodel
+passlib[bcrypt]
+python-jose[cryptography]
+jinja2
+xhtml2pdf
+fastapi-mail
+python-multipart

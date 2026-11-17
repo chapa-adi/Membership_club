@@ -15,13 +15,13 @@ templates = Jinja2Templates(directory="app/templates")
 @router.get("/create-test-user")
 def create_test_user(session: Session = Depends(get_session)):
     existing = session.exec(
-        select(User).where(User.email == "test@example.com")
+        select(User).where(User.email == "test@example.com") #add test email address
     ).first()
     if existing:
         return {"message": "Test user already exists"}
 
     user = User(
-        email="test@example.com",
+        email="test@example.com", # add testing email address
         password_hash=hash_password("test123"),
         role="member",
     )
@@ -35,8 +35,9 @@ def create_test_user(session: Session = Depends(get_session)):
 @router.get("/login", response_class=HTMLResponse)
 def login_page(request: Request, error: str | None = None):
     return templates.TemplateResponse(
-        "login.html",
-        {"request": request, "error": error}
+        request=request,
+        name="login.html",
+        context={"error": error},
     )
 
 
@@ -53,16 +54,18 @@ def login_submit(
     if not user:
         # if Email not found  we show error on login page
         return templates.TemplateResponse(
-            "login.html",
-            {"request": request, "error": "Email not found"},
+            request=request,
+            name="login.html",
+            context={"error": "Email not found"},
             status_code=400,
         )
 
     if not verify_password(password, user.password_hash):
         # Wrong password we show error on login page
         return templates.TemplateResponse(
-            "login.html",
-            {"request": request, "error": "Wrong password"},
+            request=request,
+            name="login.html",
+            context={"error": "Wrong password"},
             status_code=400,
         )
 

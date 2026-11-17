@@ -1,7 +1,7 @@
 
 import json
 import os
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 import jwt  
 from dotenv import load_dotenv
@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 GOOGLE_WALLET_ISSUER_ID = os.getenv("GOOGLE_WALLET_ISSUER_ID")
-GOOGLE_WALLET_CLASS_ID = os.getenv("GOOGLE_WALLET_CLASS_ID")  # full id: issuerId.classSuffix
+GOOGLE_WALLET_CLASS_ID = f"{GOOGLE_WALLET_ISSUER_ID}.golf_day_pass"  # full id: issuerId.classSuffix
 SERVICE_ACCOUNT_KEY_PATH = os.getenv("GOOGLE_WALLET_KEY_PATH")  # path to .json key
 
 
@@ -34,10 +34,16 @@ def generate_wallet_save_url(ticket_id: int, name: str, email: str) -> str:
         "id": object_id,
         "classId": GOOGLE_WALLET_CLASS_ID,  
         "state": "ACTIVE",
+        "cardTitle": {
+    "defaultValue": {
+        "language": "en-US",
+        "value": "Golf Pass",
+    }
+},
         "header": {
             "defaultValue": {
                 "language": "en-US",
-                "value": "Paradise Golf Day Pass",
+                "value": " Golf Day Pass",
             }
         },
         "subheader": {
@@ -59,7 +65,7 @@ def generate_wallet_save_url(ticket_id: int, name: str, email: str) -> str:
         ],
     }
 
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc)
 
     # JWT payload for Save to Wallet
     payload = {
@@ -72,9 +78,12 @@ def generate_wallet_save_url(ticket_id: int, name: str, email: str) -> str:
             "http://localhost:8000",
             "http://127.0.0.1:8000",
         ],
-        "payload": {
-            "genericObjects": [generic_object],
-        },
+       "payload": {
+    "genericClasses": [
+        {"id": GOOGLE_WALLET_CLASS_ID}
+    ],
+    "genericObjects": [generic_object],
+},
     }
 
     # Sign the JWT
@@ -84,3 +93,4 @@ def generate_wallet_save_url(ticket_id: int, name: str, email: str) -> str:
     #  getting the actuall URL
     save_url = f"https://pay.google.com/gp/v/save/{signed_jwt}"
     return save_url
+

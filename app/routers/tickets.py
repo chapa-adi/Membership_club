@@ -30,8 +30,9 @@ def buy_ticket_page(
     success: str | None = None,
 ):
     return templates.TemplateResponse(
-        "buy_ticket.html",
-        {
+        request=request,
+        name="buy_ticket.html",
+        context={
             "request": request,
             "success": success,
             "wallet_url": None,  # nothing on initial load
@@ -127,7 +128,7 @@ async def buy_ticket_submit(
 
     #  Email the ticket to the user
     message = MessageSchema(
-        subject="Your Paradise Golf Day Pass",
+        subject="Your  Golf Day Pass",
         recipients=[email],
         body=body_text,
         subtype="plain",
@@ -140,8 +141,9 @@ async def buy_ticket_submit(
     success_msg = f"{email}"
 
     return templates.TemplateResponse(
-        "buy_ticket.html",
-        {
+        request=request,
+        name="buy_ticket.html",
+        context={
             "request": request,
             "success": success_msg,
             "wallet_url": wallet_url,
